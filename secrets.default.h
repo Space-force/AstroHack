@@ -1,2 +1,2 @@
-WIFI_SSID=
-WIFI_PASSWORD=
+const char* WIFI_SSID="";
+const char* WIFI_PASSWORD="";

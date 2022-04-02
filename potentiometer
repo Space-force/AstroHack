@@ -1,0 +1,23 @@
+/*
+ *  potentiometer
+ */
+
+#include <ESP8266WiFi.h>
+
+void setup() {
+Serial.begin(115200);
+}
+
+
+void loop() {
+  /*
+   * 
+   * potentiometer 10k ohm and 4.7kohm to split the 3.3v to 1v circuit
+   * values seem to be from 0 - ~280
+   */
+
+  int sensorValue = analogRead(A0);
+
+  Serial.println(sensorValue);
+
+}

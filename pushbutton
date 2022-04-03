@@ -1,0 +1,44 @@
+/*
+ *  potentiometer
+ */
+
+#include <ESP8266WiFi.h>
+
+
+// variables will change:
+int buttonState = 0;         // variable for reading the pushbutton status
+
+void setup() {
+Serial.begin(115200);
+pinMode(13, INPUT);
+}
+
+
+void loop() {
+  /*
+   * 
+   * potentiometer 10k ohm and 4.7kohm to split the 3.3v to 1v circuit
+   * values seem to be from 0 - ~280
+   */
+
+  int sensorValue = analogRead(A0);
+
+  Serial.println(sensorValue);
+  // read the state of the pushbutton value:
+  buttonState = digitalRead(13);
+
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState == HIGH) {
+    // turn LED on:
+    //digitalWrite(ledPin, HIGH);
+    Serial.println("HIGH");
+  } else {
+    // turn LED off:
+    //digitalWrite(ledPin, LOW);
+    Serial.println("LOW");
+  }
+
+
+  
+
+}

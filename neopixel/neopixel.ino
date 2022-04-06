@@ -1,48 +1,78 @@
-#include <FastLED.h>
+#include <Adafruit_NeoPixel.h>
 
 // How many leds in your strip?
-#define NUM_LEDS 4
-#define DATA_PIN 14
+#define PIN 14
+#define NUM_LEDS 6
 
 // Define the array of leds
-CRGB leds[NUM_LEDS];
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN, NEO_GRB + NEO_KHZ800);
+#define DELAYVAL 500 // Time (in milliseconds) to pause between pixels
 
 void setup() { 
-  Serial.begin(57600);
-  Serial.println("resetting");
-  FastLED.addLeds<WS2812,DATA_PIN,RGB>(leds,NUM_LEDS);
-  FastLED.setBrightness(84);
+  strip.begin();
+  strip.show(); // Initialize all pixels to 'off'
 }
 
-void fadeall() { for(int i = 0; i < NUM_LEDS; i++) { leds[i].nscale8(250); } }
+void setPixel(int Pixel, byte red, byte green, byte blue) {
+  strip.setPixelColor(Pixel, strip.Color(red, green, blue));
+}
+
+void setAll(byte red, byte green, byte blue) {
+  for(int i = 0; i < NUM_LEDS; i++ ) {
+    setPixel(i, red, green, blue);
+  }
+  strip.show();
+}
+
 
 void loop() { 
-  static uint8_t hue = 0;
-  Serial.print("x");
-  // First slide the led in one direction
-  for(int i = 0; i < NUM_LEDS; i++) {
-    // Set the i'th led to red 
-    leds[i] = CHSV(hue++, 255, 255);
-    // Show the leds
-    FastLED.show(); 
-    // now that we've shown the leds, reset the i'th led to black
-    // leds[i] = CRGB::Black;
-    fadeall();
-    // Wait a little bit before we loop around and do it again
-    delay(10);
-  }
-  Serial.print("x");
+setPixel(0, 0, 0, 255);
+setPixel(1, 0, 255, 0);
+//CylonBounce(0xff, 0, 0, 4, 10, 50);
+}
 
-  // Now go in the other direction.  
-  for(int i = (NUM_LEDS)-1; i >= 0; i--) {
-    // Set the i'th led to red 
-    leds[i] = CHSV(hue++, 255, 255);
-    // Show the leds
-    FastLED.show();
-    // now that we've shown the leds, reset the i'th led to black
-    // leds[i] = CRGB::Black;
-    fadeall();
-    // Wait a little bit before we loop around and do it again
-    delay(10);
+void CylonBounce(byte red, byte green, byte blue, int EyeSize, int SpeedDelay, int ReturnDelay){
+
+  for(int i = 0; i < NUM_LEDS-EyeSize-2; i++) {
+    setAll(0,0,0);
+    setPixel(i, red/10, green/10, blue/10);
+    for(int j = 1; j <= EyeSize; j++) {
+      setPixel(i+j, red, green, blue);
+    }
+    setPixel(i+EyeSize+1, red/10, green/10, blue/10);
+    strip.show();
+    delay(SpeedDelay);
   }
+
+  delay(ReturnDelay);
+
+  for(int i = NUM_LEDS-EyeSize-2; i > 0; i--) {
+    setAll(0,0,0);
+    setPixel(i, red/10, green/10, blue/10);
+    for(int j = 1; j <= EyeSize; j++) {
+      setPixel(i+j, red, green, blue);
+    }
+    setPixel(i+EyeSize+1, red/10, green/10, blue/10);
+    strip.show();
+    delay(SpeedDelay);
+  }
+ 
+  delay(ReturnDelay);
+}
+
+void breathe() 
+{
+    //fill_solid(leds, NUM_LEDS, CRGB::White);  // fill white
+    //FastLED.show();
+    //delay(1000);
+    // Dim a color by 25% (64/256ths)
+    // eventually fading to full black
+    // for(int i = 0; i < NUM_LEDS; i++) {
+    //  leds[i].nscale8( 192);
+    //}
+    //for(int i = 0; i < NUM_LEDS; i++) {
+      //leds[i].fadeLightBy( 64 );
+    //}
+    //FastLED.show();
+    //delay(1000);
 }
